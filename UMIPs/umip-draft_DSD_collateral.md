@@ -5,6 +5,7 @@
 | Authors    | John (dsdravage@gmail.com), Sean (sean@opendao.io) |
 | Status     | Draft                                                                                                                                    |
 | Created    | January 13, 2021                                                                                                                           |
+| Link to Discourse    | https://discourse.umaproject.org/t/add-dynamic-set-dollar-as-a-collateral-currency/120                                           |
  
 ## Summary (2-5 sentences)
 This UMIP will add DSD to the supported collateral currencies into the global whitelist contract, allowing the usage of DSD as collateral currency.
