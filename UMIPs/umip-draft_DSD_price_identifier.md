@@ -5,6 +5,8 @@
 | Authors    | John (dsdravage@gmail.com), Sean (sean@opendao.io) |
 | Status     | Draft                                                                                                                                    |
 | Created    | January 14, 2021                                                                                                                           |
+| Link to Discourse   | https://discourse.umaproject.org/t/adding-dsd-usd-as-a-price-identifier/121                                                          |
+
 
 ## Summary (2-5 sentences)
 The DVM should support price requests for the DSD/USD and USD/DSD price index.
