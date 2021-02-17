@@ -12,89 +12,83 @@
 The DVM should support price requests for the WBTC/USD and USD/WBTC price index. These price identifiers will serve to support future developments involving WBTC. 
 
 ## Motivation
-1. What are the financial positions enabled by creating this synthetic that do not already exist?
 
 The DVM currently does not support the WBTC/USD or USD/WBTC price index. Supporting the WBTCUSD price identifier would enable UMA partners (like OpenDAO or others) to provide access to the asset via the UMA architecture.
 
-2. Please provide an example of a person interacting with a contract that uses this price identifier.
-
 The addition of this price identifier would enable DeFi users to deploy WBTC as collateral for minting a stable coin, or for other purposes. 
-
-3. Consider adding market data
 
 At the time of writing, WBTC is trading at $33,767.47 with a 24-hour trading volume of $346,285,873. There is a circulating supply of 117,000 WBTC coins with a max supply of 117,000. Uniswap is currently the most active market trading it.
 More information on the WBTC network can be found on the website: https://wbtc.network/
 
 ## Markets and Data Sources
 
-1) What markets should the price be queried from? It is recommended to have at least 3 markets.
+1)Markets
 
-Binance, Sushiswap, and Uniswap should be used to construct the price.These 3 exchanges comprise a significant amount of WBTC trade volume and have available pricefeeds on Cryptowatch. 
+- Binance
+- Sushiswap
+- Uniswap 
+
+These three exchanges should be used to construct the price.They comprise a significant amount of WBTC trade volume and have available pricefeeds on Cryptowatch. 
 
 
-2) Which specific pairs should be queried from each market?
+2) Pairs
 
-Binance: WBTC/ETH, Sushiswap WBTC/ETH, Uniswap: WBTC/USDC
+Binance: WBTC/BTC, Sushiswap WBTC/ETH, Uniswap: WBTC/ETH
 
 
 3) Provide recommended endpoints to query for real-time prices from each market listed.
 
-Binance: 
+- Binance: WBTC/BTC
 
-WBTC/ETH https://api.binance.com/api/v3/ticker/price?symbol=WBTCETH
+ https://api.binance.com/api/v3/ticker/price?symbol=WBTCBTC
 
-Sushiswap:WBTC/ETH
+- Sushiswap:WBTC/ETH
 
 https://sushiswap.fi/token/0x2260fac5e5542a773aa44fbcfedf7c193bc2c599
 
-Uniswap:WBTC/USDC
+- Uniswap:WBTC/ETH
 
-https://info.uniswap.org/pair/0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc
+https://info.uniswap.org/pair/0xbb2b8038a1640196fbe3e38816f3e67cba72d940
 
 
 4) How often is the provided price updated?
 
-The lower bound on the price update frequency is a minute.
+ - The lower bound on the price update frequency is a minute.
 
 
 5) Provide recommended endpoints to query for historical prices from each market listed.
 
-Binance: WBTC/ETH 
+- Binance: WBTC/BTC 
 
-https://api.binance.com/api/v3/klines?symbol=WBTCETH&interval=1d
+https://api.binance.com/api/v3/klines?symbol=WBTCBTC&interval=1d
 
-Sushiswap:WBTC/ETH 
+- Sushiswap:WBTC/ETH 
 
 https://sushiswap.fi/token/0x2260fac5e5542a773aa44fbcfedf7c193bc2c599
 
-Uniswap:WBTC/USDC
+- Uniswap:WBTC/ETH
 
-https://info.uniswap.org/pair/0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc
+https://info.uniswap.org/pair/0xbb2b8038a1640196fbe3e38816f3e67cba72d940
 
 
 6) Do these sources allow for querying up to 74 hours of historical data?
-
-Yes
+- Yes
 
 
 7) How often is the provided price updated?
-
-The lower bound on the price update frequency is a minute.
+- The lower bound on the price update frequency is a minute.
 
 
 8) Is an API key required to query these sources?
-
-No
+- No
 
 
 9) Is there a cost associated with usage?
-
-No
+- No
 
 
 10) If there is a free tier available, how many queries does it allow for?
-
-The lower bound on the number of queries allowed per hour is >> 1000.
+- The lower bound on the number of queries allowed per hour is >> 1000.
 
 
 11) What would be the cost of sending 15,000 queries?
@@ -103,25 +97,29 @@ Approximately $0
 
 
 ## Price Feed Implementation
-Associated WBTC price feeds are available via Cryptowat.ch, Sushiswap, and Uniswap. Conversion from WBTC/ETH to WBTC/USD price needed for Binance and Sushiswap data. No other further feeds required.
+Associated WBTC price feeds are available via Cryptowat.ch, Sushiswap, and Uniswap. Conversion from WBTC/ETH to WBTC/USD price needed for Binance and Sushiswap data. No other further feeds required. However, recommendation is to add a 1 minute TWAP specification for the Uniswap and Sushiswap prices. This will help prevent any attempted manipulation of the pool prices.
 
 ## Technical Specifications
 
-Price Identifier Name: WBTC/USD
+- Price Identifier Name: WBTC/USD
+- Base Currency: WBTC
+- Quote Currency: USD
+- Intended Collateral Currency: USDC
+- Collateral Decimals: 6 
+- Rounding: Nearest 6th decimal place (fifth decimal place digit >= 5 rounds up and < 5 rounds down)
 
-Base Currency: WBTC
+- Price Identifier Name: USD/WBTC
+- Base Currency: USD
+- Quote Currency: WBTC
+- Intended Collateral Currency: WBTC
+- Collateral Decimals: 8
+- Rounding: Nearest 8th decimal place (ninth decimal place digit >= 5 rounds up and < 5 rounds down)
 
-Quote Currency: USD
+1) Does the value of this collateral currency match the standalone value of the listed quote currency?:
+- YES
 
-Intended Collateral Currency: USDC
-
-Does the value of this collateral currency match the standalone value of the listed quote currency?: YES
-
-Is your collateral currency already approved to be used by UMA financial contracts?: YES
-
-Collateral Decimals: 6 decimals
-
-Rounding: Closest, 0.5 up
+2) Is your collateral currency already approved to be used by UMA financial contracts?:
+- YES
 
 
 ## Rationale
@@ -136,14 +134,21 @@ In the current setting, there will need to be a significant event that erodes co
 
 ## Implementation
 
-What prices should be queried for and from which markets?
-Binance: WBTC/ETH, Sushiswap: WBTC/ETH, Uniswap: WBTC/USDC
-Pricing interval
-1 minute
-Input processing
-None. Human intervention in extreme circumstances where the result differs from broad market consensus.
-Result processing
-median
+Voters should query for the price of WBTC/USD USD/WBTC at the price request timestamp on Binance, Sushiswap and Uniswap. Recommended endpoints are provided in the markets and data sources section above.
+
+When using the recommended endpoints, voters should:
+
+1) Use the open price of the OHLC period that the timestamp falls in.
+
+2) Take the median of these results.
+
+3) The median from step 2 should be rounded to six decimals to determine the WBTC/USD price. Furthermore, Recommendation is to add a 1 minute TWAP specification for the Uniswap and Sushiswap prices. This will help prevent any attempted manipulation of the pool prices.
+
+4) The value of USD/WBTC will follow the exact same process but undergo one additional step: it will be the result of dividing 1/EGLDUSD.
+
+For both implementations, voters should determine whether the returned price differs from broad market consensus. This is meant to provide flexibility in any unforeseen circumstances as voters are responsible for defining broad market consensus.
+
+This is only a reference implementation, how one queries the exchanges should be varied and determined by the voter to ensure that there is no central point of failure.
 
 
 ## Security considerations
